@@ -5,8 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telica Telecom Link Planner</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmCFK8l5e83wNqK_1gll7WEhplgMgvnqc&libraries=places,geometry,elevation&callback=initMap" async defer></script>
+     <!-- Load jsPDF library -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+     <!-- Load Chart.js library for charts -->
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ 
+     <!-- Google Maps API with async and defer, and callback to initMap -->
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmCFK8l5e83wNqK_1gll7WEhplgMgvnqc&libraries=places,geometry,elevation&callback=initMap" async defer></script> <!-- Replace YOUR_API_KEY with your actual key -->
+ 
+     <!-- Load Google Charts -->
+     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+     <script>
+         google.charts.load('current', {
+             packages: ['corechart', 'line']
+         });
+     </script>
 </head>
 <body>
     <div id="main-header">Telica Telecom Link Planner</div>
@@ -31,6 +45,7 @@
     <div class="container">
         <div class="form-container">
             <h3>Link 1 (Master) Parameters</h3>
+            <!-- Link 1 form fields -->
             <label for="link-name-1">Link Name:</label>
             <input type="text" id="link-name-1" placeholder="Link 1 Name">
             <label for="lat-1">Latitude:</label>
@@ -43,9 +58,9 @@
             <select id="channel-bandwidth-1">
                 <option value="20">20 MHz</option>
                 <option value="40">40 MHz</option>
-                <option value="80">80 MHz</option>
                 <option value="80">60 MHz</option>
-                <option value="80">100 MHz</option>
+                <option value="60">80 MHz</option>
+                <option value="100">100 MHz</option>
             </select>
             <label for="channel-frequency-1">Channel Frequency (MHz):</label>
             <select id="channel-frequency-1">
@@ -53,13 +68,13 @@
                 <option value="5200">5200 MHz</option>
                 <option value="5220">5220 MHz</option>
                 <option value="5240">5240 MHz</option>
-                <option value="5240">5260 MHz</option>
-                <option value="5240">5280 MHz</option>
-                <option value="5240">5300 MHz</option>
-                <option value="5240">5320 MHz</option>
-                <option value="5240">5340 MHz</option>
-                <option value="5240">5360 MHz</option>
-                <option value="5240">5380 MHz</option>
+                <option value="5260">5260 MHz</option>
+                <option value="5280">5280 MHz</option>
+                <option value="5300">5300 MHz</option>
+                <option value="5320">5320 MHz</option>
+                <option value="5340">5340 MHz</option>
+                <option value="5360">5360 MHz</option>
+                <option value="5380">5380 MHz</option>
             </select>
             <label for="radio-type-1">Radio Type:</label>
             <select id="radio-type-1">
@@ -85,6 +100,7 @@
 
         <div class="form-container">
             <h3>Link 2 (Slave) Parameters</h3>
+            <!-- Link 2 form fields -->
             <label for="link-name-2">Link Name:</label>
             <input type="text" id="link-name-2" placeholder="Link 2 Name">
             <label for="lat-2">Latitude:</label>
@@ -97,9 +113,9 @@
             <select id="channel-bandwidth-2">
                 <option value="20">20 MHz</option>
                 <option value="40">40 MHz</option>
-                <option value="40">60 MHz</option>
+                <option value="60">60 MHz</option>
                 <option value="80">80 MHz</option>
-                <option value="80">100 MHz</option>
+                <option value="100">100 MHz</option>
             </select>
             <label for="channel-frequency-2">Channel Frequency (MHz):</label>
             <select id="channel-frequency-2">
@@ -107,13 +123,13 @@
                 <option value="5200">5200 MHz</option>
                 <option value="5220">5220 MHz</option>
                 <option value="5240">5240 MHz</option>
-                <option value="5240">5260 MHz</option>
-                <option value="5240">5280 MHz</option>
-                <option value="5240">5300 MHz</option>
-                <option value="5240">5320 MHz</option>
-                <option value="5240">5340 MHz</option>
-                <option value="5240">5360 MHz</option>
-                <option value="5240">5380 MHz</option>
+                <option value="5260">5260 MHz</option>
+                <option value="5280">5280 MHz</option>
+                <option value="5300">5300 MHz</option>
+                <option value="5320">5320 MHz</option>
+                <option value="5340">5340 MHz</option>
+                <option value="5360">5360 MHz</option>
+                <option value="5380">5380 MHz</option>
             </select>
             <label for="radio-type-2">Radio Type:</label>
             <select id="radio-type-2">
@@ -141,8 +157,7 @@
     <div class="button-container">
         <button onclick="calculateLink()">Calculate</button>
         <button class="clear-button" onclick="clearForm()">Clear</button>
-        <button class="download-button" onclick="downloadConfiguration()">download Configuration</button>
-
+        <button class="download-button" onclick="downloadConfiguration()">Download Configuration</button>
     </div>
 
     <div id="map"></div>
@@ -152,7 +167,26 @@
         <div id="azimuth-info-2"></div>
         <div id="link-distance"></div>
         <div id="link-status"></div>
-    </div>
-    <script src="test2.js" defer></script>
+        <div id="link-availability"></div>
+        <div id="throughput"></div>
+        <div id="distance"></div>
+        <div id="azimuth"></div>
+        <div id="fresnel-radius"></div>
+        <div id="link-availability-1"></div>
+        <div id="link-availability-2"></div>
+        <div id="throughput-1"></div>
+        <div id="throughput-2"></div>
+        <div id="elevation-1"></div>
+        <div id="elevation-2"></div>
+        <div id="snr-1"></div>
+        <div id="snr-2"></div>
+        <div id="rsl-1"></div>
+        <div id="rsl-2"></div>
+ <!-- Map and Chart -->
+ <div id="elevation-chart-container">
+     <div id="chart-div"></div>
+ </div>
+    <!-- External script -->
+    <script src="display.js" defer></script>
 </body>
 </html>
