@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telica Telecom Link Planner</title>
+    <link rel="stylesheet" href="styles2.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Company Name Heading -->
+        <div class="header">
+            <h1>Telica Telecom Link Planner</h1>
+        </div>
+
+        <!-- Forms Container -->
+        <div class="forms-container">
+            <!-- Login Form -->
+            <div id="login-form" class="form login-form">
+                <h2>Login</h2>
+                <input type="text" placeholder="Enter your username" id="login-username" required>
+                <input type="password" placeholder="Enter your password" id="login-password" required>
+                <button class="btn" onclick="login()">Login</button>
+                <p>Don't have an account? <span onclick="showRegistrationForm()">Sign Up</span></p>
+            </div>
+
+            <!-- Registration Form -->
+            <div id="registration-form" class="form signup-form" style="display: none;">
+                <h2>Sign Up</h2>
+                <input type="text" placeholder="Enter your username" id="signup-username" required>
+                <input type="password" placeholder="Enter your password" id="signup-password" required>
+                <input type="password" placeholder="Confirm your password" id="confirm-password" required>
+                <button class="btn" onclick="signUp()">Sign Up</button>
+                <p>Already have an account? <span onclick="showLoginForm()">Login</span></p>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <div class="footer">
+            <p>Developed and Maintained by <strong>Harshit Adhikari</strong></p>
+        </div>
+    </div>
+
+    <script src="script3.js"></script>
+</body>
+</html>
