@@ -1,0 +1,125 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Full-screen container with a smooth background color transition */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), url('https://source.unsplash.com/1600x900/?technology,network') center/cover no-repeat; /* Dark overlay with background image */
+    color: white;
+}
+
+/* Header styles for the company name */
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    background-clip: text;
+    color: transparent;
+}
+
+/* Styles for forms container */
+.forms-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    max-width: 450px;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.form {
+    display: block;
+    width: 100%;
+}
+
+.form h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+input:focus {
+    outline: none;
+    border-color: #ff7e5f;
+    box-shadow: 0 0 5px rgba(255, 127, 95, 0.8);
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background-color: #ff7e5f;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #feb47b;
+}
+
+p {
+    text-align: center;
+    color: #ccc;
+}
+
+span {
+    color: #ff7e5f;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Footer Section Styling */
+.footer {
+    margin-top: 30px;
+    text-align: center;
+    color: white;
+    font-size: 1rem;
+}
+
+.footer p {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.footer strong {
+    color: #ff7e5f;
+}
