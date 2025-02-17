@@ -1,192 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telica Telecom Link Planner</title>
-    <link rel="stylesheet" href="styles.css">
-     <!-- Load jsPDF library -->
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Telica Telecom Link Planner</title>
+        <link rel="stylesheet" href="styles3.css">
+        
+        <!-- Load jsPDF library first -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        
+        <!-- Load html2canvas library second -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.3/html2canvas.min.js"></script>
+    
+        <!-- Load other libraries like Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+        <!-- Google Maps API -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmCFK8l5e83wNqK_1gll7WEhplgMgvnqc&libraries=places,geometry,elevation&callback=initMap" async defer></script>
+    
+        <!-- Load Google Charts -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script>
+            google.charts.load('current', {
+                packages: ['corechart', 'line']
+            });
+        </script>
+    </head>
+    
+    <body>
+        <div id="main-header">Telica Telecom Link Planner</div>
 
-     <!-- Load Chart.js library for charts -->
-     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
- 
-     <!-- Google Maps API with async and defer, and callback to initMap -->
-     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmCFK8l5e83wNqK_1gll7WEhplgMgvnqc&libraries=places,geometry,elevation&callback=initMap" async defer></script> <!-- Replace YOUR_API_KEY with your actual key -->
- 
-     <!-- Load Google Charts -->
-     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-     <script>
-         google.charts.load('current', {
-             packages: ['corechart', 'line']
-         });
-     </script>
-</head>
-<body>
-    <div id="main-header">Telica Telecom Link Planner</div>
-
-    <div class="country-select-container">
-        <label for="country-select">Select Country:</label>
-        <select id="country-select" onchange="updateMapForCountry()">
-            <option value="">-- Select Country --</option>
-            <option value="usa">United States</option>
-            <option value="india">India</option>
-            <option value="canada">Canada</option>
-            <option value="uk">United Kingdom</option>
-            <option value="australia">Australia</option>
-            <option value="cotedivoire">Côte d'Ivoire</option>
-            <option value="egypt">Egypt</option>
-            <option value="southafrica">South Africa</option>
-            <option value="nigeria">Nigeria</option>
-            <option value="kenya">Kenya</option>
-        </select>
-    </div>
-
-    <div class="container">
-        <div class="form-container">
-            <h3>Link 1 (Master) Parameters</h3>
-            <!-- Link 1 form fields -->
-            <label for="link-name-1">Link Name:</label>
-            <input type="text" id="link-name-1" placeholder="Link 1 Name">
-            <label for="lat-1">Latitude:</label>
-            <input type="text" id="lat-1" placeholder="Latitude for Link 1">
-            <label for="lng-1">Longitude:</label>
-            <input type="text" id="lng-1" placeholder="Longitude for Link 1">
-            <label for="max-eirp-1">EIRP (dBm):</label>
-            <input type="text" id="max-eirp-1" placeholder="EIRP for Link 1">
-            <label for="channel-bandwidth-1">Channel Bandwidth (MHz):</label>
-            <select id="channel-bandwidth-1">
-                <option value="20">20 MHz</option>
-                <option value="40">40 MHz</option>
-                <option value="80">60 MHz</option>
-                <option value="60">80 MHz</option>
-                <option value="100">100 MHz</option>
-            </select>
-            <label for="channel-frequency-1">Channel Frequency (MHz):</label>
-            <select id="channel-frequency-1">
-                <option value="5180">5180 MHz</option>
-                <option value="5200">5200 MHz</option>
-                <option value="5220">5220 MHz</option>
-                <option value="5240">5240 MHz</option>
-                <option value="5260">5260 MHz</option>
-                <option value="5280">5280 MHz</option>
-                <option value="5300">5300 MHz</option>
-                <option value="5320">5320 MHz</option>
-                <option value="5340">5340 MHz</option>
-                <option value="5360">5360 MHz</option>
-                <option value="5380">5380 MHz</option>
-            </select>
-            <label for="radio-type-1">Radio Type:</label>
-            <select id="radio-type-1">
-                <option value="TW5S-Sac">TW5S-Sac</option>
-                <option value="TW5S-acDish-Pro">TW5S-acDish-Pro</option>
-                <option value="TW5S-acDish">TW5S-acDish</option>
-                <option value="TW5S-Nac">TW5S-Nac</option>
-                <option value="TW5S-L15ac">TW5S-L15ac</option>
-            </select>
-            <label for="tower-height-1">Tower Height (m):</label>
-            <input type="text" id="tower-height-1" placeholder="Tower Height for Link 1">
-            <label for="antenna-gain-1">Antenna Gain (dBi):</label>
-            <select id="antenna-gain-1">
-                <option value="20">20 dBi</option>
-                <option value="22">22 dBi</option>
-                <option value="24">24 dBi</option>
-                <option value="26">26 dBi</option>
-                <option value="28">28 dBi</option>
-                <option value="30">30 dBi</option>
-                <option value="32">32 dBi</option>
+        <div class="country-select-container">
+            <label for="country-select">Select Country:</label>
+            <select id="country-select" onchange="updateMapForCountry()">
+                <option value="">-- Select Country --</option>
+                <option value="usa">United States</option>
+                <option value="india">India</option>
+                <option value="canada">Canada</option>
+                <option value="uk">United Kingdom</option>
+                <option value="australia">Australia</option>
+                <option value="cotedivoire">Côte d'Ivoire</option>
+                <option value="egypt">Egypt</option>
+                <option value="southafrica">South Africa</option>
+                <option value="nigeria">Nigeria</option>
+                <option value="kenya">Kenya</option>
             </select>
         </div>
 
-        <div class="form-container">
-            <h3>Link 2 (Slave) Parameters</h3>
-            <!-- Link 2 form fields -->
-            <label for="link-name-2">Link Name:</label>
-            <input type="text" id="link-name-2" placeholder="Link 2 Name">
-            <label for="lat-2">Latitude:</label>
-            <input type="text" id="lat-2" placeholder="Latitude for Link 2">
-            <label for="lng-2">Longitude:</label>
-            <input type="text" id="lng-2" placeholder="Longitude for Link 2">
-            <label for="max-eirp-2">EIRP (dBm):</label>
-            <input type="text" id="max-eirp-2" placeholder="EIRP for Link 2">
-            <label for="channel-bandwidth-2">Channel Bandwidth (MHz):</label>
-            <select id="channel-bandwidth-2">
-                <option value="20">20 MHz</option>
-                <option value="40">40 MHz</option>
-                <option value="60">60 MHz</option>
-                <option value="80">80 MHz</option>
-                <option value="100">100 MHz</option>
-            </select>
-            <label for="channel-frequency-2">Channel Frequency (MHz):</label>
-            <select id="channel-frequency-2">
-                <option value="5180">5180 MHz</option>
-                <option value="5200">5200 MHz</option>
-                <option value="5220">5220 MHz</option>
-                <option value="5240">5240 MHz</option>
-                <option value="5260">5260 MHz</option>
-                <option value="5280">5280 MHz</option>
-                <option value="5300">5300 MHz</option>
-                <option value="5320">5320 MHz</option>
-                <option value="5340">5340 MHz</option>
-                <option value="5360">5360 MHz</option>
-                <option value="5380">5380 MHz</option>
-            </select>
-            <label for="radio-type-2">Radio Type:</label>
-            <select id="radio-type-2">
-                <option value="TW5S-Sac">TW5S-Sac</option>
-                <option value="TW5S-acDish-Pro">TW5S-acDish-Pro</option>
-                <option value="TW5S-acDish">TW5S-acDish</option>
-                <option value="TW5S-Nac">TW5S-Nac</option>
-                <option value="TW5S-L15ac">TW5S-L15ac</option>
-            </select>
-            <label for="tower-height-2">Tower Height (m):</label>
-            <input type="text" id="tower-height-2" placeholder="Tower Height for Link 2">
-            <label for="antenna-gain-2">Antenna Gain (dBi):</label>
-            <select id="antenna-gain-2">
-                <option value="20">20 dBi</option>
-                <option value="22">22 dBi</option>
-                <option value="24">24 dBi</option>
-                <option value="26">26 dBi</option>
-                <option value="28">28 dBi</option>
-                <option value="30">30 dBi</option>
-                <option value="32">32 dBi</option>
-            </select>
+        <div class="container">
+            <div class="form-container">
+                <h3>Link 1 (Master) Parameters</h3>
+                <!-- Link 1 form fields -->
+                <label for="link-name-1">Link Name:</label>
+                <input type="text" id="link-name-1" placeholder="Link 1 Name">
+                <label for="lat-1">Latitude:</label>
+                <input type="text" id="lat-1" placeholder="Latitude for Link 1">
+                <label for="lng-1">Longitude:</label>
+                <input type="text" id="lng-1" placeholder="Longitude for Link 1">
+                <label for="max-eirp-1">EIRP (dBm):</label>
+                <input type="text" id="max-eirp-1" placeholder="EIRP for Link 1">
+                <label for="channel-bandwidth-1">Channel Bandwidth (MHz):</label>
+                <select id="channel-bandwidth-1">
+                    <option value="20">20 MHz</option>
+                    <option value="40">40 MHz</option>
+                    <option value="80">60 MHz</option>
+                    <option value="60">80 MHz</option>
+                    <option value="100">100 MHz</option>
+                </select>
+                <label for="channel-frequency-1">Channel Frequency (MHz):</label>
+                <select id="channel-frequency-1">
+                    <option value="5180">5180 MHz</option>
+                    <option value="5200">5200 MHz</option>
+                    <option value="5220">5220 MHz</option>
+                    <option value="5240">5240 MHz</option>
+                    <option value="5260">5260 MHz</option>
+                    <option value="5280">5280 MHz</option>
+                    <option value="5300">5300 MHz</option>
+                    <option value="5320">5320 MHz</option>
+                    <option value="5340">5340 MHz</option>
+                    <option value="5360">5360 MHz</option>
+                    <option value="5380">5380 MHz</option>
+                </select>
+                <label for="radio-type-1">Radio Type:</label>
+                <select id="radio-type-1">
+                    <option value="TW5S-Sac">TW5S-Sac</option>
+                    <option value="TW5S-acDish-Pro">TW5S-acDish-Pro</option>
+                    <option value="TW5S-acDish">TW5S-acDish</option>
+                    <option value="TW5S-Nac">TW5S-Nac</option>
+                    <option value="TW5S-L15ac">TW5S-L15ac</option>
+                </select>
+                <label for="tower-height-1">Tower Height (m):</label>
+                <input type="text" id="tower-height-1" placeholder="Tower Height for Link 1">
+                <label for="antenna-gain-1">Antenna Gain (dBi):</label>
+                <select id="antenna-gain-1">
+                    <option value="20">20 dBi</option>
+                    <option value="22">22 dBi</option>
+                    <option value="24">24 dBi</option>
+                    <option value="26">26 dBi</option>
+                    <option value="28">28 dBi</option>
+                    <option value="30">30 dBi</option>
+                    <option value="32">32 dBi</option>
+                </select>
+            </div>
+
+            <div class="form-container">
+                <h3>Link 2 (Slave) Parameters</h3>
+                <!-- Link 2 form fields -->
+                <label for="link-name-2">Link Name:</label>
+                <input type="text" id="link-name-2" placeholder="Link 2 Name">
+                <label for="lat-2">Latitude:</label>
+                <input type="text" id="lat-2" placeholder="Latitude for Link 2">
+                <label for="lng-2">Longitude:</label>
+                <input type="text" id="lng-2" placeholder="Longitude for Link 2">
+                <label for="max-eirp-2">EIRP (dBm):</label>
+                <input type="text" id="max-eirp-2" placeholder="EIRP for Link 2">
+                <label for="channel-bandwidth-2">Channel Bandwidth (MHz):</label>
+                <select id="channel-bandwidth-2">
+                    <option value="20">20 MHz</option>
+                    <option value="40">40 MHz</option>
+                    <option value="60">60 MHz</option>
+                    <option value="80">80 MHz</option>
+                    <option value="100">100 MHz</option>
+                </select>
+                <label for="channel-frequency-2">Channel Frequency (MHz):</label>
+                <select id="channel-frequency-2">
+                    <option value="5180">5180 MHz</option>
+                    <option value="5200">5200 MHz</option>
+                    <option value="5220">5220 MHz</option>
+                    <option value="5240">5240 MHz</option>
+                    <option value="5260">5260 MHz</option>
+                    <option value="5280">5280 MHz</option>
+                    <option value="5300">5300 MHz</option>
+                    <option value="5320">5320 MHz</option>
+                    <option value="5340">5340 MHz</option>
+                    <option value="5360">5360 MHz</option>
+                    <option value="5380">5380 MHz</option>
+                </select>
+                <label for="radio-type-2">Radio Type:</label>
+                <select id="radio-type-2">
+                    <option value="TW5S-Sac">TW5S-Sac</option>
+                    <option value="TW5S-acDish-Pro">TW5S-acDish-Pro</option>
+                    <option value="TW5S-acDish">TW5S-acDish</option>
+                    <option value="TW5S-Nac">TW5S-Nac</option>
+                    <option value="TW5S-L15ac">TW5S-L15ac</option>
+                </select>
+                <label for="tower-height-2">Tower Height (m):</label>
+                <input type="text" id="tower-height-2" placeholder="Tower Height for Link 2">
+                <label for="antenna-gain-2">Antenna Gain (dBi):</label>
+                <select id="antenna-gain-2">
+                    <option value="20">20 dBi</option>
+                    <option value="22">22 dBi</option>
+                    <option value="24">24 dBi</option>
+                    <option value="26">26 dBi</option>
+                    <option value="28">28 dBi</option>
+                    <option value="30">30 dBi</option>
+                    <option value="32">32 dBi</option>
+                </select>
+            </div>
         </div>
-    </div>
 
-    <div class="button-container">
-        <button onclick="calculateLink()">Calculate</button>
-        <button class="clear-button" onclick="clearForm()">Clear</button>
-        <button class="download-button" onclick="downloadConfiguration()">Download Configuration</button>
-    </div>
+        <div class="button-container">
+            <button onclick="calculateLink()">Calculate</button>
+            <button class="clear-button" onclick="clearForm()">Clear</button>
+            <button id="generate-report-btn">Generate Installation Report</button>
+        </div>
 
-    <div id="map"></div>
+        <div id="map"></div>
 
-    <div class="status-section">
-        <div id="azimuth-info-1"></div>
-        <div id="azimuth-info-2"></div>
-        <div id="link-distance"></div>
-        <div id="link-status"></div>
-        <div id="link-availability"></div>
-        <div id="throughput"></div>
-        <div id="distance"></div>
-        <div id="azimuth"></div>
-        <div id="fresnel-radius"></div>
-        <div id="link-availability-1"></div>
-        <div id="link-availability-2"></div>
-        <div id="throughput-1"></div>
-        <div id="throughput-2"></div>
-        <div id="elevation-1"></div>
-        <div id="elevation-2"></div>
-        <div id="snr-1"></div>
-        <div id="snr-2"></div>
-        <div id="rsl-1"></div>
-        <div id="rsl-2"></div>
- <!-- Map and Chart -->
- <div id="elevation-chart-container">
-     <div id="chart-div"></div>
- </div>
-    <!-- External script -->
-    <script src="test2.js" defer></script>
-</body>
+        <div class="status-section">
+            <div id="azimuth-info-1"></div>
+            <div id="azimuth-info-2"></div>
+            <div id="link-distance"></div>
+            <div id="link-status"></div>
+            <div id="link-availability"></div>
+            <div id="throughput"></div>
+            <div id="distance"></div>
+            <div id="azimuth"></div>
+            <div id="fresnel-radius"></div>
+            <div id="link-availability-1"></div>
+            <div id="link-availability-2"></div>
+            <div id="throughput-1"></div>
+            <div id="throughput-2"></div>
+            <div id="elevation-1"></div>
+            <div id="elevation-2"></div>
+            <div id="snr-1"></div>
+            <div id="snr-2"></div>
+            <div id="rsl-1"></div>
+            <div id="rsl-2"></div>
+            <div id="fresnel-zone-clearance"></div>
+        </div>
+
+        <div id="elevation-chart-container">
+            <div id="chart-div"></div>
+        </div>
+
+        <!-- External script -->
+        <script src="map.js" defer></script>
+    </body>
 </html>
