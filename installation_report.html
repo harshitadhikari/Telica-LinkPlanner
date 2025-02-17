@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Body and Font Styling */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1, h2 {
+            font-family: 'Roboto', sans-serif;
+            color: #2c3e50;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 40px;
+            font-weight: 500;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+
+        /* Container for content */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        th {
+            background-color: #ecf0f1;
+            color: #2980b9;
+            font-weight: 500;
+        }
+
+        td {
+            color: #7f8c8d;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f0f4f8;
+        }
+
+        /* Buttons and Misc */
+        p {
+            font-size: 1.2rem;
+            color: #34495e;
+            font-weight: 500;
+        }
+
+        .alert {
+            color: red;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn-print {
+            background-color: #2980b9;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 30px;
+        }
+
+        .btn-print:hover {
+            background-color: #1d6f91;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Installation Report</h1>
+
+        <div class="section">
+            <h2>Link 1 (Master) Details</h2>
+            <table>
+                <tr><th>Parameter</th><th>Value</th></tr>
+                <tr><td>Link Name</td><td id="link-name-1"></td></tr>
+                <tr><td>Latitude</td><td id="lat-1"></td></tr>
+                <tr><td>Longitude</td><td id="lng-1"></td></tr>
+                <tr><td>EIRP (dBm)</td><td id="max-eirp-1"></td></tr>
+                <tr><td>Channel Bandwidth (MHz)</td><td id="channel-bandwidth-1"></td></tr>
+                <tr><td>Channel Frequency (MHz)</td><td id="channel-frequency-1"></td></tr>
+                <tr><td>Radio Type</td><td id="radio-type-1"></td></tr>
+                <tr><td>Tower Height (m)</td><td id="tower-height-1"></td></tr>
+                <tr><td>Antenna Gain (dBi)</td><td id="antenna-gain-1"></td></tr>
+                <tr><td>Azimuth</td><td id="azimuth-info-1"></td></tr>
+                <tr><td>Link Status</td><td id="link-status"></td></tr>
+                <tr><td>Link Availability</td><td id="link-availability"></td></tr>
+                <tr><td>Throughput</td><td id="throughput"></td></tr>
+                <tr><td>Elevation</td><td id="elevation-1"></td></tr>
+                <tr><td>SNR</td><td id="snr-1"></td></tr>
+                <tr><td>RSL</td><td id="rsl-1"></td></tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Link 2 (Slave) Details</h2>
+            <table>
+                <tr><th>Parameter</th><th>Value</th></tr>
+                <tr><td>Link Name</td><td id="link-name-2"></td></tr>
+                <tr><td>Latitude</td><td id="lat-2"></td></tr>
+                <tr><td>Longitude</td><td id="lng-2"></td></tr>
+                <tr><td>EIRP (dBm)</td><td id="max-eirp-2"></td></tr>
+                <tr><td>Channel Bandwidth (MHz)</td><td id="channel-bandwidth-2"></td></tr>
+                <tr><td>Channel Frequency (MHz)</td><td id="channel-frequency-2"></td></tr>
+                <tr><td>Radio Type</td><td id="radio-type-2"></td></tr>
+                <tr><td>Tower Height (m)</td><td id="tower-height-2"></td></tr>
+                <tr><td>Antenna Gain (dBi)</td><td id="antenna-gain-2"></td></tr>
+                <tr><td>Azimuth</td><td id="azimuth-info-2"></td></tr>
+                <tr><td>Link Status</td><td id="link-status-2"></td></tr>
+                <tr><td>Link Availability</td><td id="link-availability-2"></td></tr>
+                <tr><td>Throughput</td><td id="throughput-2"></td></tr>
+                <tr><td>Elevation</td><td id="elevation-2"></td></tr>
+                <tr><td>SNR</td><td id="snr-2"></td></tr>
+                <tr><td>RSL</td><td id="rsl-2"></td></tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Link Distance</h2>
+            <p id="link-distance"></p>
+        </div>
+
+        <button class="btn-print" id="print-btn">Print Report</button>
+    </div>
+
+    <script>
+        // Function to handle printing the report
+        document.getElementById('print-btn').addEventListener('click', function() {
+            window.print();
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const reportData = JSON.parse(localStorage.getItem('installationReportData'));
+
+            if (!reportData) {
+                alert("No installation data found!");
+                return;
+            }
+
+            // Set the static data from localStorage (pre-filled form values)
+            document.getElementById('link-name-1').innerText = reportData.linkName1;
+            document.getElementById('lat-1').innerText = reportData.lat1;
+            document.getElementById('lng-1').innerText = reportData.lng1;
+            document.getElementById('max-eirp-1').innerText = reportData.eirp1;
+            document.getElementById('channel-bandwidth-1').innerText = reportData.channelBandwidth1;
+            document.getElementById('channel-frequency-1').innerText = reportData.channelFrequency1;
+            document.getElementById('radio-type-1').innerText = reportData.radioType1;
+            document.getElementById('tower-height-1').innerText = reportData.towerHeight1;
+            document.getElementById('antenna-gain-1').innerText = reportData.antennaGain1;
+
+            document.getElementById('link-name-2').innerText = reportData.linkName2;
+            document.getElementById('lat-2').innerText = reportData.lat2;
+            document.getElementById('lng-2').innerText = reportData.lng2;
+            document.getElementById('max-eirp-2').innerText = reportData.eirp2;
+            document.getElementById('channel-bandwidth-2').innerText = reportData.channelBandwidth2;
+            document.getElementById('channel-frequency-2').innerText = reportData.channelFrequency2;
+            document.getElementById('radio-type-2').innerText = reportData.radioType2;
+            document.getElementById('tower-height-2').innerText = reportData.towerHeight2;
+            document.getElementById('antenna-gain-2').innerText = reportData.antennaGain2;
+
+            // Calculate dynamic values based on the data
+            const lat1 = parseFloat(reportData.lat1);
+            const lng1 = parseFloat(reportData.lng1);
+            const lat2 = parseFloat(reportData.lat2);
+            const lng2 = parseFloat(reportData.lng2);
+
+            // Calculate Distance
+            const distance = calculateDistance(lat1, lng1, lat2, lng2);
+
+            // Calculate Azimuth for both links
+            const azimuth1 = calculateAzimuth(lat1, lng1, lat2, lng2);
+            const azimuth2 = calculateAzimuth(lat2, lng2, lat1, lng1);
+
+            // Calculate Link Status, Availability, and Throughput for both towers
+            const linkData1 = calculateLinkStatusAndAvailability(reportData.eirp1, reportData.towerHeight1, reportData.channelBandwidth1, reportData.channelFrequency1);
+            const linkData2 = calculateLinkStatusAndAvailability(reportData.eirp2, reportData.towerHeight2, reportData.channelBandwidth2, reportData.channelFrequency2);
+
+            // Compute RSL for both links
+            const rsl1 = calculateRSL(reportData.eirp1, reportData.antennaGain1, reportData.antennaGain2, distance, reportData.channelFrequency1);
+            const rsl2 = calculateRSL(reportData.eirp2, reportData.antennaGain2, reportData.antennaGain1, distance, reportData.channelFrequency2);
+
+            // Compute SNR for both links (Assumed noise level of -90 dBm)
+            const snr1 = calculateSNR(rsl1, -90);
+            const snr2 = calculateSNR(rsl2, -90);
+
+            // Compute Elevation for both towers
+            const elevation1 = calculateElevation(reportData.towerHeight1);
+            const elevation2 = calculateElevation(reportData.towerHeight2);
+
+            // Populate the dynamic values into the HTML
+            document.getElementById('link-distance').innerText = distance.toFixed(2) + ' km';
+
+            document.getElementById('azimuth-info-1').innerText = azimuth1.toFixed(2) + '°';
+            document.getElementById('azimuth-info-2').innerText = azimuth2.toFixed(2) + '°';
+
+            document.getElementById('link-status').innerText = linkData1.linkStatus;
+            document.getElementById('link-availability').innerText = linkData1.linkAvailability;
+            document.getElementById('throughput').innerText = linkData1.throughput.toFixed(2) + ' Mbps';
+
+            document.getElementById('link-status-2').innerText = linkData2.linkStatus;
+            document.getElementById('link-availability-2').innerText = linkData2.linkAvailability;
+            document.getElementById('throughput-2').innerText = linkData2.throughput.toFixed(2) + ' Mbps';
+
+            document.getElementById('snr-1').innerText = snr1.toFixed(2) + ' dB';
+            document.getElementById('snr-2').innerText = snr2.toFixed(2) + ' dB';
+
+            document.getElementById('rsl-1').innerText = rsl1.toFixed(2) + ' dBm';
+            document.getElementById('rsl-2').innerText = rsl2.toFixed(2) + ' dBm';
+        });
+
+        // Helper function to convert degrees to radians
+        function toRad(deg) {
+            return deg * (Math.PI / 180);
+        }
+
+        // Function to calculate distance using Haversine formula
+        function calculateDistance(lat1, lng1, lat2, lng2) {
+            const R = 6371; // Radius of the Earth in km
+            const dLat = toRad(lat2 - lat1);
+            const dLng = toRad(lng2 - lng1);
+
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                Math.sin(dLng / 2) * Math.sin(dLng / 2);
+
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            const distance = R * c; // Distance in kilometers
+            return distance;
+        }
+
+        // Function to calculate azimuth between two points
+        function calculateAzimuth(lat1, lng1, lat2, lng2) {
+            const dLng = toRad(lng2 - lng1);
+            lat1 = toRad(lat1);
+            lat2 = toRad(lat2);
+
+            const y = Math.sin(dLng) * Math.cos(lat2);
+            const x = Math.cos(lat1) * Math.sin(lat2) -
+                      Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng);
+
+            const azimuth = Math.atan2(y, x);
+            return (azimuth * 180 / Math.PI + 360) % 360;  // Azimuth in degrees
+        }
+
+        // Function to calculate Link Status, Availability and Throughput
+        function calculateLinkStatusAndAvailability(eirp, towerHeight, channelBandwidth, channelFrequency) {
+            let linkStatus = 'LOS';
+            let linkAvailability = '100%';
+            let throughput = eirp * towerHeight * channelBandwidth / 100;
+
+            if (eirp < 30 || towerHeight < 50) {
+                linkStatus = 'NEAR LOS';
+                linkAvailability = '80%';
+                throughput = throughput / 2;
+            }
+
+            return { linkStatus, linkAvailability, throughput };
+        }
+
+        // Function to calculate RSL (Received Signal Level) with correct free space loss formula
+        function calculateRSL(eirp, antennaGain1, antennaGain2, distance, frequency) {
+            const distanceInMeters = distance * 1000; // Convert distance from km to meters
+            const frequencyInHz = frequency * 1e6; // Convert frequency from MHz to Hz
+
+            // Free Space Path Loss formula (in dB)
+            const freeSpaceLoss = 20 * Math.log10(distanceInMeters) + 20 * Math.log10(frequencyInHz) - 147.55;
+
+            // Calculate RSL (in dBm)
+            const rsl = eirp + antennaGain1 + antennaGain2 - freeSpaceLoss;
+
+            return rsl;  // Returned value is in dBm
+        }
+
+        // Function to calculate Signal-to-Noise Ratio (SNR)
+        function calculateSNR(rsl, noiseLevel) {
+            return rsl - noiseLevel;
+        }
+
+        // Function to calculate elevation (dummy calculation for now)
+        function calculateElevation(towerHeight) {
+            return towerHeight;
+        }
+    </script>
+</body>
+</html>
