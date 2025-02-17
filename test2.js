@@ -25,7 +25,6 @@ const tw5sSacSpecifications = {
     workingMode: "Access Point, Site (WDS/TDMA3), Site (ARPNAT)",
     wirelessFeatures: "Intelligent dynamic polling, automatic channel selection, modulation mode selection, transmission power control (ATPC)"
 };
-
 // Coordinates for different countries
 const countryCoordinates = {
     usa: { lat: 37.0902, lng: -95.7129 },
@@ -54,27 +53,69 @@ const countryEirpValues = {
     kenya: { eirp: 39 }
 };
 
-// Function to update map for the selected country
+// Initialize the map
+function initMap() {
+    console.log("Google Maps API has been loaded successfully!");
+    map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 8,
+        center: { lat: 20.5937, lng: 78.9629 }, // Default: India coordinates
+    });
+
+    elevator = new google.maps.ElevationService();
+    updateMapForCountry(); // Update map for the default country
+}
+
+// Function to update the map for the selected country
 function updateMapForCountry() {
+    if (!map) {
+        console.error("Map is not initialized!");
+        return;
+    }
+
     const selectedCountry = document.getElementById('country-select').value;
-    if (selectedCountry) {
+    console.log("Selected country:", selectedCountry);  // Debugging: log selected country
+
+    if (selectedCountry && countryCoordinates[selectedCountry]) {
         const { lat, lng } = countryCoordinates[selectedCountry];
+
         map.setCenter(new google.maps.LatLng(lat, lng));
 
         const eirp = countryEirpValues[selectedCountry]?.eirp || '';
         document.getElementById('max-eirp-1').value = eirp;
         document.getElementById('max-eirp-2').value = eirp;
+    } else {
+        console.warn("Country coordinates for selected country not found:", selectedCountry);
     }
 }
 
-function initMap() {
-    map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 5,
-        center: { lat: 20.5937, lng: 78.9629 }, // Default: India coordinates
-    });
+// Function to reset the map (clear the form and reset the map center)
+function resetMap() {
+    if (!map) {
+        console.error("Map is not initialized!");
+        return;
+    }
 
-    elevator = new google.maps.ElevationService();
+    map.setCenter(new google.maps.LatLng(20.5937, 78.9629)); // Reset to India
+    map.setZoom(8);
+
+    document.getElementById('max-eirp-1').value = '';
+    document.getElementById('max-eirp-2').value = '';
+    document.getElementById('country-select').value = '';
+
+    const mapContainer = document.getElementById('map');
+    mapContainer.style.display = 'block'; // Ensure map container is visible
+    console.log('Map container display status:', mapContainer.style.display);
 }
+
+// Add event listener for the clear button
+document.addEventListener('DOMContentLoaded', function() {
+    const clearButton = document.getElementById('clear-form-button');
+    if (clearButton) {
+        clearButton.addEventListener('click', function() {
+            resetMap();
+        });
+    }
+});
 
 // Function to calculate RSL
 function calculateRSL(txPower, txAntennaGain, rxAntennaGain, distance, frequency) {
@@ -94,8 +135,7 @@ function calculateSNR(rsl, noiseLevel) {
 function calculateElevation(towerHeight) {
     return towerHeight * 0.1;  // Example: Elevation factor
 }
-
-// Function to calculate Distance between two coordinates (in meters)
+// Function to calculate Distance between two coordinates (in kilometers)
 function calculateDistance(lat1, lng1, lat2, lng2) {
     const R = 6371000;  // Radius of Earth in meters
     const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -104,8 +144,13 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
               Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
               Math.sin(dLng / 2) * Math.sin(dLng / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;  // Distance in meters
+    const distanceInMeters = R * c;  // Distance in meters
+    
+    // Convert distance to kilometers and return with 2 decimal places
+    const distanceInKilometers = distanceInMeters / 1000;
+    return distanceInKilometers.toFixed(2) + " ";  // Return distance in kilometers with 2 decimal places
 }
+
 
 // Function to calculate Azimuth between two points (bearing angle)
 function calculateAzimuth(lat1, lng1, lat2, lng2) {
@@ -127,11 +172,11 @@ function calculateLinkStatusAndAvailability(eirp, towerHeight, channelBandwidth,
     if (eirp >= 30 && towerHeight >= 20) {
         if (channelBandwidth >= 40 && frequency >= 5200) {
             linkStatus = "LOS";
-            linkAvailability = "High";
+            linkAvailability = "100%";
             throughput = 900;  // Example throughput for LOS
         } else if (channelBandwidth >= 20 && frequency >= 5000) {
             linkStatus = "Near LOS";
-            linkAvailability = "Medium";
+            linkAvailability = "80%";
             throughput = 600;  // Example throughput for Near LOS
         }
     }
@@ -221,6 +266,14 @@ function calculateLink() {
         icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
     });
 
+    // Create a LatLngBounds object to fit the map view to both markers
+    const bounds = new google.maps.LatLngBounds();
+    bounds.extend(marker1.getPosition());
+    bounds.extend(marker2.getPosition());
+
+    // Set the map's viewport to the bounds of both markers, and zoom in to fit them
+    map.fitBounds(bounds);
+
     polyline = new google.maps.Polyline({
         path: [{ lat: lat1, lng: lng1 }, { lat: lat2, lng: lng2 }],
         geodesic: true,
@@ -246,6 +299,7 @@ function calculateLink() {
     document.getElementById('throughput-2').innerHTML = "Throughput (Tower 2): " + linkData2.throughput + " Mbps";
     document.getElementById('elevation-1').innerHTML = "Elevation (Tower 1): " + elevation1Calculated + " meters";
     document.getElementById('elevation-2').innerHTML = "Elevation (Tower 2): " + elevation2Calculated + " meters";
+    document.getElementById('azimuth').innerHTML = "Azimuth: " + azimuth1.toFixed(2) + "° / " + azimuth2.toFixed(2) + "°";
     
     // SNR and RSL Results for both links
     document.getElementById('snr-1').innerHTML = "SNR (Tower 1): " + snr1 + " dB";
@@ -254,26 +308,39 @@ function calculateLink() {
     document.getElementById('rsl-2').innerHTML = "RSL (Tower 2): " + rsl2 + " dBm";
 }
 
-// Function to reset the map and input fields
-function resetMap() {
+// 
+function clearForm() {
+    console.log('Clear form button clicked');
+
+    // Clear Link 1 form fields
+    document.getElementById('link-name-1').value = '';
     document.getElementById('lat-1').value = '';
     document.getElementById('lng-1').value = '';
-    document.getElementById('tower-height-1').value = '';
-    document.getElementById('antenna-gain-1').value = '';
     document.getElementById('max-eirp-1').value = '';
+    document.getElementById('channel-bandwidth-1').value = '20'; // default value
+    document.getElementById('channel-frequency-1').value = '5180'; // default value
+    document.getElementById('radio-type-1').value = 'TW5S-Sac'; // default value
+    document.getElementById('tower-height-1').value = '';
+    document.getElementById('antenna-gain-1').value = '20'; // default value
+
+    // Clear Link 2 form fields
+    document.getElementById('link-name-2').value = '';
     document.getElementById('lat-2').value = '';
     document.getElementById('lng-2').value = '';
-    document.getElementById('tower-height-2').value = '';
-    document.getElementById('antenna-gain-2').value = '';
     document.getElementById('max-eirp-2').value = '';
-    document.getElementById('channel-bandwidth-1').value = 20;
-    document.getElementById('channel-frequency-1').value = 5200;
-    document.getElementById('channel-bandwidth-2').value = 20;
-    document.getElementById('channel-frequency-2').value = 5200;
+    document.getElementById('channel-bandwidth-2').value = '20'; // default value
+    document.getElementById('channel-frequency-2').value = '5180'; // default value
+    document.getElementById('radio-type-2').value = 'TW5S-Sac'; // default value
+    document.getElementById('tower-height-2').value = '';
+    document.getElementById('antenna-gain-2').value = '20'; // default value
 
-    if (marker1) marker1.setMap(null);
-    if (marker2) marker2.setMap(null);
-    if (polyline) polyline.setMap(null);
+    // Clear other elements
+    document.getElementById('link-distance').innerText = '';
+    document.getElementById('link-status').innerText = '';
+    document.getElementById('link-availability').innerText = '';
+    document.getElementById('throughput').innerText = '';
+    document.getElementById('chart-div').innerHTML = '';
+    document.getElementById('map').innerHTML = ''; // Reset map container (if needed)
 }
 
 function drawElevationChart(chartData) {
@@ -297,57 +364,59 @@ function drawElevationChart(chartData) {
         }
     });
 }
+document.getElementById('generate-report-btn').addEventListener('click', function() {
+    // Collect the data from the form
+    const reportData = {
+        // Link 1 Data
+        linkName1: document.getElementById('link-name-1').value,
+        lat1: document.getElementById('lat-1').value,
+        lng1: document.getElementById('lng-1').value,
+        eirp1: document.getElementById('max-eirp-1').value,
+        channelBandwidth1: document.getElementById('channel-bandwidth-1').value,
+        channelFrequency1: document.getElementById('channel-frequency-1').value,
+        radioType1: document.getElementById('radio-type-1').value,
+        towerHeight1: document.getElementById('tower-height-1').value,
+        antennaGain1: document.getElementById('antenna-gain-1').value,
 
-function clearInputs() {
-    document.getElementById('lat-1').value = '';
-    document.getElementById('lng-1').value = '';
-    document.getElementById('max-eirp-1').value = '';
-    document.getElementById('lat-2').value = '';
-    document.getElementById('lng-2').value = '';
-    document.getElementById('max-eirp-2').value = '';
-    document.getElementById('link-distance').innerText = '';
-    document.getElementById('link-status').innerText = '';
-    document.getElementById('link-availability').innerText = '';
-    document.getElementById('throughput').innerText = '';
-    document.getElementById('chart-div').innerHTML = '';
-}
+        // Link 2 Data
+        linkName2: document.getElementById('link-name-2').value,
+        lat2: document.getElementById('lat-2').value,
+        lng2: document.getElementById('lng-2').value,
+        eirp2: document.getElementById('max-eirp-2').value,
+        channelBandwidth2: document.getElementById('channel-bandwidth-2').value,
+        channelFrequency2: document.getElementById('channel-frequency-2').value,
+        radioType2: document.getElementById('radio-type-2').value,
+        towerHeight2: document.getElementById('tower-height-2').value,
+        antennaGain2: document.getElementById('antenna-gain-2').value,
 
-// Function to download the configuration (PDF format)
-function downloadConfiguration() {
-    const configData = {
-        link1: {
-            name: document.getElementById('link-name-1').value,
-            lat: document.getElementById('lat-1').value,
-            lng: document.getElementById('lng-1').value,
-            eirp: document.getElementById('max-eirp-1').value,
-            bandwidth: document.getElementById('channel-bandwidth-1').value,
-            frequency: document.getElementById('channel-frequency-1').value,
-            radio: document.getElementById('radio-type-1').value,
-            towerHeight: document.getElementById('tower-height-1').value,
-            gain: document.getElementById('antenna-gain-1').value,
-        },
-        link2: {
-            name: document.getElementById('link-name-2').value,
-            lat: document.getElementById('lat-2').value,
-            lng: document.getElementById('lng-2').value,
-            eirp: document.getElementById('max-eirp-2').value,
-            bandwidth: document.getElementById('channel-bandwidth-2').value,
-            frequency: document.getElementById('channel-frequency-2').value,
-            radio: document.getElementById('radio-type-2').value,
-            towerHeight: document.getElementById('tower-height-2').value,
-            gain: document.getElementById('antenna-gain-2').value,
-        }
+        // Output Parameters (Use innerText for non-input elements)
+        azimuthInfo1: document.getElementById('azimuth-info-1').innerText,
+        azimuthInfo2: document.getElementById('azimuth-info-2').innerText,
+        linkDistance: document.getElementById('link-distance').innerText,
+        linkStatus: document.getElementById('link-status').innerText,
+        linkAvailability: document.getElementById('link-availability').innerText,
+        throughput: document.getElementById('throughput').innerText,
+        distance: document.getElementById('distance').innerText,
+        azimuth: document.getElementById('azimuth').innerText,
+        fresnelRadius: document.getElementById('fresnel-radius').innerText,
+        linkAvailability1: document.getElementById('link-availability-1').innerText,
+        linkAvailability2: document.getElementById('link-availability-2').innerText,
+        throughput1: document.getElementById('throughput-1').innerText,
+        throughput2: document.getElementById('throughput-2').innerText,
+        elevation1: document.getElementById('elevation-1').innerText,
+        elevation2: document.getElementById('elevation-2').innerText,
+        snr1: document.getElementById('snr-1').innerText,
+        snr2: document.getElementById('snr-2').innerText,
+        rsl1: document.getElementById('rsl-1').innerText,
+        rsl2: document.getElementById('rsl-2').innerText
     };
 
-    console.log("Config Data: ", configData); // Add this line to log the configuration data
+    // Store the data in localStorage
+    localStorage.setItem('installationReportData', JSON.stringify(reportData));
 
-    const configText = JSON.stringify(configData, null, 2);
-
-    const blob = new Blob([configText], { type: 'application/json' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'configuration.txt';
-    link.click();
-}
+    // Navigate to the installation_report.html page
+    window.location.href = 'installation_report.html';
+});
 
 
+ 
