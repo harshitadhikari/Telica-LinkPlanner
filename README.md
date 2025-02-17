@@ -1,3 +1,3 @@
-Telica Telecom Link Planner is a network planning and optimization tool designed for telecommunications engineers to plan, design, and optimize the layout of wireless and wired communication networks. It helps in the design of transmission links, ensuring efficient use of resources and compliance with coverage, capacity, and quality requirements.
-
+Telica Telecom Link Planner is a network planning and optimization tool designed for telecommunications engineers to plan, design, and optimize the layout of wireless and wired communication networks. 
+It helps in the design of transmission links, ensuring efficient use of resources and compliance with coverage, capacity, and quality requirements.
 The tool assists in tasks like link budget analysis, frequency planning, coverage prediction, and network capacity analysis, making it valuable for operators who need to plan large-scale networks with various factors such as terrain, interference, and signal propagation taken into account. This software often integrates features like graphical interfaces, real-time analysis, and reporting, allowing engineers to visualize the network design and make informed decisions.
